@@ -1,0 +1,78 @@
+
+<% include header %>
+
+<% if(!checkoutDone) {%>
+<% if(cart && cart.items.length > 0) { %>
+<form action="/checkout" method="post" class="form-horizontal">
+    <div class="form-group">
+        <label for="first-name" class="col-sm-2 control-label">First Name</label>
+        <div class="col-sm-10"><input type="text" name="firstname" class="form-control" id="first-name" placeholder="First Name"></div>
+    </div>
+    <div class="form-group">
+        <label for="last-name" class="col-sm-2 control-label">Last Name</label>
+        <div class="col-sm-10"><input type="text" name="lastname" class="form-control" id="last-name" placeholder="Last Name"></div>
+    </div>
+    <div class="form-group">
+        <label for="email" class="col-sm-2 control-label">E-mail</label>
+        <div class="col-sm-10"><input type="email" name="email" class="form-control" id="email" placeholder="E-mail"></div>
+    </div>
+    <div class="form-group">
+        <label for="address"  class="col-sm-2 control-label">Address</label>
+        <div class="col-sm-10"><input type="text" name="address" class="form-control" id="address" placeholder="Address"></div>
+    </div>
+    <div class="form-group">
+        <label for="city"  class="col-sm-2 control-label">City / Town</label>
+        <div class="col-sm-10"><input type="text" name="city" class="form-control" id="city" placeholder="City / Town"></div>
+    </div>
+    <div class="form-group">
+        <label for="zip"  class="col-sm-2 control-label">ZIP code</label>
+        <div class="col-sm-10"><input type="text" name="zip" class="form-control" id="zip" placeholder="ZIP code"></div>
+    </div>
+    <div class="row">
+       <div class="col-md-10 col-md-offset-2">
+    <table class="cart-table table table-bordered table-striped">
+        <tbody>
+        <% cart.items.forEach(function(product) { %>
+        <tr>
+            <td><%= product.title %></td>
+            <td>
+
+
+                <%= product.formattedPrice %>
+            </td>
+            <td>
+                <%= product.qty %>
+            </td>
+        </tr>
+
+        <% }); %>
+        <tr class="info">
+            <td colspan="3" class="text-right">
+                Total:
+                <%= cart.formattedTotals %>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+       </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-2">
+            <div class="pull-left">
+                <img src="/public/images/paypal.jpg" alt="">
+            </div>
+            <div class="pull-right checkout-btn-wrap">
+                <input type="submit" value="Send" class="btn btn-primary btn-lg">
+            </div>
+        </div>
+        <input type="hidden" name="nonce" value="<%= nonce%>">
+    </div>
+</form>
+<% } else { %>
+<p class="alert alert-info">Sorry, no products in your cart.</p>
+<% } %>
+<% } else { %>
+<% include paypal-form %>
+<% } %>
+
+<% include footer %>

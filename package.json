@@ -1,0 +1,26 @@
+{
+  "name": "Cart",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node.js shopping cart",
+  "author": "Gabriele Romanato <gabriele@gabrieleromanato.com>",
+  "dependencies": {
+    "body-parser": "^1.13.2",
+    "connect-mongodb-session": "^1.3.0",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.3.4",
+    "express": "^4.13.1",
+    "express-session": "^1.15.2",
+    "helmet": "^3.6.1",
+    "mongoose": "^4.9.9",
+    "serve-favicon": "^2.4.2"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^3.4.2",
+    "request": "^2.81.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
+}

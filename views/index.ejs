@@ -1,0 +1,42 @@
+<% include header %>
+
+
+
+    <% if(products && products.length > 0) { %>
+    <ul id="products" class="row">
+    <% var i = 0; products.forEach(function(product) { i++; %>
+        <li class="product col col-md-4">
+            <h3 class="product-title"><%= product.title %></h3>
+            <figure class="product-image">
+                <img src="/public/images/products/<%= product.image %>" alt="" class="img-thumbnail img-responsive">
+            </figure>
+            <div class="cart-data">
+                <form action="/cart" method="post">
+                    <div>
+                        <span class="price">
+
+                            <%= product.formattedPrice %>
+                        </span>
+                        <span class="qty-wrap">
+                            <span class="qty-minus"><i class="fa fa-minus"></i></span>
+                            <input type="text" name="qty" class="qty" value="1">
+                            <span class="qty-plus"><i class="fa fa-plus"></i></span>
+                        </span>
+                        <input type="hidden" name="product_id" value="<%= product.product_id %>">
+                        <input type="hidden" name="nonce" value="<%= nonce %>">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-cart-plus"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </li>
+        <% if(i % 3 === 0) {%><div class="clearfix"></div><% } %>
+    <% }); %>
+    </ul>
+    <% } else { %>
+        <p class="alert alert-info">Sorry, no products to show.</p>
+    <% } %>
+
+
+<% include footer %>

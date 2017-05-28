@@ -1,0 +1,108 @@
+@import url(bootstrap/css/bootstrap.min.css);
+@import url(font-awesome/css/font-awesome.min.css);
+
+:focus {
+    outline-style: none;
+}
+
+#products {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.product {
+    padding: 1em;
+}
+
+.product-title {
+    text-transform: capitalize;
+    font-weight: bold;
+    font-family: serif;
+    font-size: 17px;
+}
+
+.qty {
+    width: 2em;
+    border: none;
+    margin: 0 2em;
+    height: 100%;
+    line-height: 2;
+    text-align: center;
+}
+
+.qty-wrap {
+    display: inline-block;
+    margin: 0 0.5em;
+    position: relative;
+    height: 2em;
+    width: 6em;
+}
+
+.qty-minus,
+.qty-plus {
+    width: 2em;
+    height: 100%;
+    line-height: 2;
+    text-align: center;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+}
+
+.qty-minus {
+    left: 0;
+}
+
+.qty-plus {
+    right: 0;
+}
+
+td .qty {
+    border: none;
+    background: transparent;
+    width: 100%;
+    display: block;
+}
+
+.cart-table tbody tr td {
+    vertical-align: middle;
+}
+
+#content {
+    padding: 5% 0;
+}
+
+.go-to-cart-lnk {
+    padding-right: 1em;
+}
+
+.navbar .navbar-brand {
+    color: #fff;
+}
+
+.cart-data {
+    margin-top: 1.5em;
+}
+
+.product-thumb {
+    max-width: 80px;
+}
+
+.cart-footer .btn {
+    border: none;
+    font-weight: bold;
+}
+
+.checkout-btn-wrap {
+    padding-top: 3em;
+}
+
+#info {
+    background: #222;
+    color: #fff;
+    text-align: center;
+    margin-top: 3em;
+    padding: 1em;
+    border-radius: 4px;
+}

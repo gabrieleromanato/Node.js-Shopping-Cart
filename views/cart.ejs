@@ -1,0 +1,50 @@
+<% include header %>
+
+
+    <% if(cart && cart.items.length > 0) { %>
+    <form action="/cart/update" method="post">
+        <table class="cart-table table table-bordered table-striped">
+            <tbody>
+                <% cart.items.forEach(function(product) { %>
+                <tr>
+                    <td>
+                        <a href="/cart/remove/<%= product.id%>/<%= nonce %>">
+                            <i class="fa fa-remove text-danger"></i>
+                        </a>
+                    </td>
+                    <td class="product-thumb">
+                        <img src="/public/images/products/<%= product.image %>" alt="" class="img-thumbnail img-responsive">
+                    </td>
+                    <td><%= product.title %></td>
+                    <td>
+
+                        <%= product.formattedPrice %>
+                    </td>
+                    <td>
+                        <input type="text" class="qty" name="qty[]" value="<%= product.qty %>">
+                        <input type="hidden" name="product_id[]" value="<%= product.id%>">
+                        <input type="hidden" name="nonce" value="<%= nonce %>">
+                    </td>
+                </tr>
+
+                <% }); %>
+                <tr class="info">
+                    <td colspan="5" class="text-right">
+                        Total:
+
+                        <%= cart.formattedTotals %>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="clearfix cart-footer">
+            <button type="submit" class="btn btn-default pull-left"><i class="fa fa-refresh"></i> Update cart</button>
+            <a href="/cart/empty/<%= nonce %>" class="btn btn-default pull-left"><i class="fa fa-remove"></i> Empty cart</a>
+            <a href="/checkout" class="btn btn-default pull-right">Checkout <i class="fa fa-angle-right"></i></a>
+        </div>
+    </form>
+    <% } else { %>
+    <p class="alert alert-info">Sorry, no products in your cart.</p>
+    <% } %>
+
+<% include footer %>
