@@ -1,0 +1,15 @@
+{
+  "name": "CMSTest",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tests",
+  "author": "Gabriele Romanato <gabriele@gabrieleromanato.com>",
+  "dependencies": {
+    "mocha": "^3.4.2",
+    "request": "^2.81.0"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha"
+  }
+}

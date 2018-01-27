@@ -4,7 +4,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 8080;
 const mongoose = require('mongoose');
-const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -14,7 +13,9 @@ const app = express();
 const config = require('./lib/config.js');
 
 mongoose.Promise = Promise;
-mongoose.connect(config.db.url);
+mongoose.connect(config.db.url, {
+    useMongoClient: true
+});
 
 const Products = require('./models/Products');
 const Cart = require('./lib/Cart');
@@ -39,7 +40,6 @@ app.use('/public', express.static(path.join(__dirname, '/public'), {
   dotfiles: 'ignore',
   etag: false
 }));
-app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(helmet());
@@ -47,12 +47,22 @@ app.use(session({
     secret: config.secret,
     resave: false,
     saveUninitialized: true,
-    store: store,
     unset: 'destroy',
-    name: config.name
+    store: store,
+    name: config.name + '-' + Security.generateId(),
+    genid: (req) => {
+        return Security.generateId()
+    }
 }));
 
 app.get('/', (req, res) => {
+  if(!req.session.cart) {
+      req.session.cart = {
+          items: [],
+          totals: 0.00,
+          formattedTotals: ''
+      };
+  }  
   Products.find({price: {'$gt': 0}}).sort({price: -1}).limit(6).then(products => {
       let format = new Intl.NumberFormat(req.app.locals.locale.lang, {style: 'currency', currency: req.app.locals.locale.currency });
       products.forEach( (product) => {
@@ -83,8 +93,7 @@ app.get('/cart', (req, res) => {
 app.get('/cart/remove/:id/:nonce', (req, res) => {
    let id = req.params.id;
    if(/^\d+$/.test(id) && Security.isValidNonce(req.params.nonce, req)) {
-       Cart.removeFromCart(parseInt(id, 10));
-       Cart.saveCart(req);
+       Cart.removeFromCart(parseInt(id, 10), req.session.cart);
        res.redirect('/cart');
    } else {
        res.redirect('/');
@@ -105,8 +114,8 @@ app.post('/cart', (req, res) => {
     let product = parseInt(req.body.product_id, 10);
     if(qty > 0 && Security.isValidNonce(req.body.nonce, req)) {
         Products.findOne({product_id: product}).then(prod => {
-            Cart.addToCart(prod, qty);
-            Cart.saveCart(req);
+            let cart = (req.session.cart) ? req.session.cart : null;
+            Cart.addToCart(prod, qty, cart);
             res.redirect('/cart');
         }).catch(err => {
            res.redirect('/');
@@ -120,8 +129,10 @@ app.post('/cart/update', (req, res) => {
     let ids = req.body["product_id[]"];
     let qtys = req.body["qty[]"];
     if(Security.isValidNonce(req.body.nonce, req)) {
-        Cart.updateCart(ids, qtys);
-        Cart.saveCart(req);
+        let cart = (req.session.cart) ? req.session.cart : null;
+        let i = (!Array.isArray(ids)) ? [ids] : ids;
+        let q = (!Array.isArray(qtys)) ? [qtys] : qtys;
+        Cart.updateCart(i, q, cart);
         res.redirect('/cart');
     } else {
         res.redirect('/');
